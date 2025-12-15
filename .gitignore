@@ -1,0 +1,27 @@
+# --------------------------------
+# Files not commited to github
+# -------------------------------- 
+# macOS system files
+.DS_Store
+**/.DS_Store
+
+
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.cpython-*
+
+# Machine learning models and pipelines
+*.joblib
+
+# Ignore cleaned and preprocessed data
+data/cleaned/*.csv
+data/processed/full_preprocessor/*.csv
+data/processed/pre_pipeline/*.csv
+data/processed/test_predictions/*.csv
+
+# Ignore virtual environment
+venv/
+.env/
+env/

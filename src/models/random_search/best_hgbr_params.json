@@ -1,0 +1,13 @@
+{
+    "regressor__regressor__validation_fraction": 0.15,
+    "regressor__regressor__n_iter_no_change": 20,
+    "regressor__regressor__min_samples_leaf": 20,
+    "regressor__regressor__max_leaf_nodes": 255,
+    "regressor__regressor__max_iter": 2000,
+    "regressor__regressor__max_features": 0.8,
+    "regressor__regressor__max_depth": null,
+    "regressor__regressor__max_bins": 255,
+    "regressor__regressor__learning_rate": 0.03,
+    "regressor__regressor__l2_regularization": 0.0,
+    "regressor__regressor__early_stopping": true
+}
