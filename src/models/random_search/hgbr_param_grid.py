@@ -1,6 +1,21 @@
 """
-Hyperparameter search spaces for HistGradientBoostingRegressor
-Regime-based to avoid pathological parameter combinations.
+Hyperparameter search space for HistGradientBoostingRegressor.
+
+The search space is defined using a regime-based strategy to avoid
+pathological or unstable parameter combinations. Each regime represents
+a coherent trade-off between model capacity, regularization strength,
+and boosting dynamics.
+
+Randomized hyperparameter search configuration:
+- Search method: RandomizedSearchCV
+- Number of sampled configurations: 60
+- Cross-validation: 10-fold K-Fold (with shuffling)
+- Scoring metric: Mean Absolute Error (MAE)
+- Parallelization: n_jobs = -1
+- Random seed: random_state = 0
+
+Early stopping is enabled in all regimes to improve computational
+efficiency and prevent overfitting.
 """
 
 # --- Hyperparameter search space (regime-based to avoid bad combos) --- #
