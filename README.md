@@ -22,7 +22,6 @@ car_price_predictor/
 │   ├── raw/                       # Original, immutable dataset
 │   ├── cleaned/                   # Cleaned data (fixed misspellings and inconsistencies)
 │   └── processed/                 # Fully transformed datasets for modeling
-│       ├── full_preprocessor/     # Output of the final preprocessing pipeline
 │       ├── pre_pipeline/          # Outputs from the initial preprocessing pipeline
 │       └── test_predictions/      # Predictions of each model on the test set
 │
