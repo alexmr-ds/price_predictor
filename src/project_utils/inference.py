@@ -8,14 +8,13 @@ import json
 import os
 from typing import Any, Dict, Iterable
 
-import joblib
 import numpy as np
+import joblib
 import math
 import pandas as pd
 from pathlib import Path
 
-
-from project_utils.paths import PROJ_ROOT, CLEANED_DATA_DIR
+from paths import PROJ_ROOT, CLEANED_DATA_DIR
 
 # Locations
 MODELS_DIR = PROJ_ROOT / "src" / "models"
@@ -34,7 +33,6 @@ RAW_FEATURE_COLUMNS = [
     "tax",
     "mpg",
     "engineSize",
-    "paintQuality%",
     "previousOwners",
     "hasDamage",
 ]
