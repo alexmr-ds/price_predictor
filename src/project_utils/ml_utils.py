@@ -7,7 +7,7 @@ and model evaluation.
 import sys
 from pathlib import Path
 
-PROJ_ROOT = Path().resolve().parents[1]
+PROJ_ROOT = Path(__file__).resolve().parents[2]
 sys.path.append(str(PROJ_ROOT / "src"))
 # Load processed data directory path
 from project_utils.paths import PRE_PIPELINE_DIR

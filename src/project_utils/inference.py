@@ -14,7 +14,7 @@ import math
 import pandas as pd
 from pathlib import Path
 
-from paths import PROJ_ROOT, CLEANED_DATA_DIR
+from .paths import PROJ_ROOT, CLEANED_DATA_DIR
 
 # Locations
 MODELS_DIR = PROJ_ROOT / "src" / "models"

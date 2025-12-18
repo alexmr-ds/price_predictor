@@ -9,10 +9,66 @@ This project includes an environment.yml file that specifies the exact Conda env
 ```
 conda env create -f environment.yml
 ```
-2. Activate the environemt 
+2. Activate the environment 
 ```
 conda activate car_price_env
 ```
+
+## Automated Pipeline Execution
+
+The project includes a `run_pipeline.py` script that automates the execution of all notebooks in the correct order. This script handles environment setup, executes notebooks sequentially, and provides progress feedback with loading animations.
+
+### Quick Start
+
+Run all notebooks automatically:
+```
+python run_pipeline.py
+```
+
+The script will:
+1. Check for conda environment setup (optional)
+2. Execute notebooks in the correct order:
+   - `data_cleaning.ipynb` - Cleans the raw data
+   - `LR.ipynb` - Creates preprocessing pipeline and baseline model
+   - `TBEM.ipynb` - Trains tree-based ensemble models
+   - `BR.ipynb` - Trains bagging regressor
+   - `Ensemble.ipynb` - Creates final stacking ensemble
+3. Stop execution if any notebook fails (since subsequent notebooks depend on previous ones)
+4. Display execution time and summary statistics
+
+### Command-Line Options
+
+```
+# Interactive mode (asks for confirmation and environment setup)
+python run_pipeline.py
+
+# Non-interactive mode (no prompts)
+python run_pipeline.py --yes
+python run_pipeline.py -y
+
+# Set up conda environment from environment.yml
+python run_pipeline.py --setup-env
+
+# Skip environment setup, use current Python environment
+python run_pipeline.py --skip-env
+
+```
+
+### Environment Setup
+
+The script can automatically detect and set up the conda environment:
+- If conda is available and `environment.yml` exists, you'll be prompted to set up the environment
+- The script can create the conda environment if it doesn't exist
+- If you're already in the correct environment, it will detect and proceed
+- You can skip environment setup with `--skip-env` to use your current Python environment
+
+### Features
+
+- **Loading animations**: Visual progress indicators while notebooks execute
+- **Error handling**: Stops execution on first failure with detailed error messages
+- **Execution time tracking**: Shows time taken for each notebook and total pipeline time
+- **Clean output**: No notebook copies created (outputs go to temporary directories)
+- **Dependency management**: Ensures notebooks run in the correct order
 
 ## Project Organization
 ```
@@ -42,6 +98,7 @@ car_price_predictor/
 │       └── paths.py               # Centralized project paths
 │
 ├── README.md                      # Project documentation
+├── run_pipeline.py                # Automated script to run all notebooks in order
 ├── app.py                         # Interactive car price prediction inference web application 
 ├── .gitignore                     # Git ignore rules
 ├── environment.yml                # Conda environment used in the project
@@ -49,21 +106,38 @@ car_price_predictor/
 ```
 
 ## Usage 
-1.	Clean the dataset
-Run the data_cleaning.ipynb notebook to generate the corrected CSV files.
-These cleaned datasets serve as the foundation for all subsequent modeling steps.
 
-2.	Initial baseline model (Linear Regression)
-The first model implemented for this regression task is a simple Linear Regression model.
-This notebook introduces key project rationales and constructs the preprocessing pipeline later reused by more advanced models.
+### Automated Execution (Recommended)
 
-3.	Model development notebooks
-The following notebooks implement and tune three additional regression models.
-Each of these models outperforms the linear baseline and is subsequently incorporated into the ensemble learning stage.
+The easiest way to reproduce the entire pipeline is using the automated script:
 
-4.	Stacking ensemble implementation
-The best-performing models are combined into a stacking ensemble.
-This meta-model leverages the strengths of each individual estimator and is used to produce the final predictions for the test set.
+```
+python run_pipeline.py
+```
+
+This will execute all notebooks in the correct order automatically. See the [Automated Pipeline Execution](#automated-pipeline-execution) section for more details.
+
+### Manual Execution
+
+If you prefer to run notebooks manually, follow these steps:
+
+1.	**Clean the dataset**
+   Run the `data_cleaning.ipynb` notebook to generate the corrected CSV files.
+   These cleaned datasets serve as the foundation for all subsequent modeling steps.
+
+2.	**Initial baseline model (Linear Regression)**
+   The first model implemented for this regression task is a simple Linear Regression model.
+   This notebook introduces key project rationales and constructs the preprocessing pipeline later reused by more advanced models.
+
+3.	**Model development notebooks**
+   The following notebooks implement and tune three additional regression models.
+   Each of these models outperforms the linear baseline and is subsequently incorporated into the ensemble learning stage.
+
+4.	**Stacking ensemble implementation**
+   The best-performing models are combined into a stacking ensemble.
+   This meta-model leverages the strengths of each individual estimator and is used to produce the final predictions for the test set.
+
+**Note**: Notebooks must be executed in order as each depends on outputs from previous notebooks.
 
 ## Dataset description
 
