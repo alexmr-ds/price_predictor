@@ -224,12 +224,12 @@ class Spinner:
     def _spin(self):
         """Internal method to run the spinner animation."""
         while not self.stop_spinner:
-            sys.stdout.write(f"\r{next(self.spinner_chars)} {self.message}...")
-            sys.stdout.flush()
+            sys.stderr.write(f"\r{next(self.spinner_chars)} {self.message}...")
+            sys.stderr.flush()
             time.sleep(self.delay)
         # Clear the spinner line
-        sys.stdout.write("\r" + " " * (len(self.message) + 10) + "\r")
-        sys.stdout.flush()
+        sys.stderr.write("\r" + " " * (len(self.message) + 10) + "\r")
+        sys.stderr.flush()
 
     def start(self):
         """Start the spinner animation."""
@@ -241,11 +241,14 @@ class Spinner:
         """Stop the spinner animation."""
         self.stop_spinner = True
         if self.spinner_thread:
-            self.spinner_thread.join(timeout=0.5)
+            self.spinner_thread.join(timeout=1.0)
+        # Clear the spinner line first
+        sys.stderr.write("\r" + " " * (len(self.message) + 15) + "\r")
+        sys.stderr.flush()
         # Show completion status
         status = "✓" if success else "✗"
-        sys.stdout.write(f"\r{status} {self.message}\n")
-        sys.stdout.flush()
+        sys.stderr.write(f"\r{status} {self.message}\n")
+        sys.stderr.flush()
 
     def __enter__(self):
         """Context manager entry."""
@@ -278,9 +281,14 @@ def run_notebook(notebook_path, description):
     # Create a temporary directory for nbconvert output
     temp_output_dir = tempfile.mkdtemp(prefix="nbconvert_")
 
+    spinner = None
+    result = None
     try:
         # Start spinner animation
-        with Spinner(f"Executing {description}"):
+        spinner = Spinner(f"Executing {description}")
+        spinner.start()
+        
+        try:
             # Execute notebook using nbconvert
             # --ExecutePreprocessor.timeout=600 sets a 10-minute timeout per cell
             # --output-dir redirects output to temp directory (will be cleaned up)
@@ -303,6 +311,11 @@ def run_notebook(notebook_path, description):
                 text=True,
                 cwd=str(PROJ_ROOT),
             )
+        finally:
+            # Always stop the spinner immediately after subprocess completes
+            if spinner:
+                success = (result is not None and result.returncode == 0)
+                spinner.stop(success=success)
 
         elapsed_time = time.time() - start_time
 
@@ -323,6 +336,9 @@ def run_notebook(notebook_path, description):
             return False
 
     except Exception as e:
+        # Make sure spinner is stopped on exception
+        if spinner:
+            spinner.stop(success=False)
         elapsed_time = time.time() - start_time
         print(f"  Execution time: {elapsed_time:.2f} seconds")
         print(f"\n  EXCEPTION: {str(e)}\n")
