@@ -18,7 +18,7 @@ SRC_DIR = PROJ_ROOT / "src"
 if str(SRC_DIR) not in sys.path:
     sys.path.insert(0, str(SRC_DIR))
 
-from project_utils import inference
+from project_utils import inference, cleaning_utils
 
 
 st.set_page_config(page_title="Car Price Predictor", layout="wide")
@@ -86,7 +86,7 @@ def collect_user_input(brand_models: dict):
 
     # --- Feature inputs driven by brand–model ranges --- #
     year = st.sidebar.number_input(
-        "Year", **range_imputer(selected_ranges, "year"), step=1
+        "year", **range_imputer(selected_ranges, "year"), step=1
     )
 
     mileage = st.sidebar.slider(
@@ -100,16 +100,6 @@ def collect_user_input(brand_models: dict):
         **range_imputer(selected_ranges, "engineSize"),
     )
 
-    fuel_type = st.sidebar.selectbox(
-        "Fuel type",
-        [
-            category
-            for category in selected_categories["fuelType"]
-            if category.lower() != "unknown"
-        ],
-        index=0,
-    )
-
     transmission = st.sidebar.selectbox(
         "Transmission",
         [
@@ -119,16 +109,7 @@ def collect_user_input(brand_models: dict):
         ],
         index=0,
     )
-
-    mpg = st.sidebar.slider(
-        "MPG",
-        **range_imputer(selected_ranges, "mpg"),
-    )
-
-    tax = st.sidebar.slider(
-        "Tax (£)",
-        **range_imputer(selected_ranges, "tax"),
-    )
+    mpg = 0
 
     return {
         "Brand": brand,
@@ -136,10 +117,8 @@ def collect_user_input(brand_models: dict):
         "year": year,
         "transmission": transmission,
         "mileage": mileage,
-        "fuelType": fuel_type,
-        "tax": tax,
-        "mpg": mpg,
         "engineSize": engine_size,
+        "mpg": mpg,
     }
 
 
@@ -158,8 +137,12 @@ def main():
 
     if st.button("Predict"):
         raw_df = inference.build_raw_input(payload)
+        feature_engineered_df = cleaning_utils.engineer_features(
+            raw_df, log_features=["mileage", "mpg"]
+        )
+
         # Stacking model expects raw input; its base estimators handle preprocessing
-        price = inference.predict_price(model, raw_df)
+        price = inference.predict_price(model, feature_engineered_df)
 
         # st.success(f"Predicted price: £{price:,.0f}")
         st.markdown(

@@ -30,11 +30,11 @@ RAW_FEATURE_COLUMNS = [
     "transmission",
     "mileage",
     "fuelType",
-    "tax",
-    "mpg",
     "engineSize",
-    "previousOwners",
     "hasDamage",
+    "tax",
+    "previousOwners",
+    "mpg",
 ]
 
 
@@ -96,7 +96,7 @@ def load_brand_model_mapping(
 
 def build_brand_model_ranges(
     df: pd.DataFrame = pd.read_csv(
-        os.path.join(CLEANED_DATA_DIR, "cleaned_train_data.csv")
+        os.path.join(CLEANED_DATA_DIR, "non_engineered_train_data.csv")
     ),
     brand_col: str = "Brand",
     model_col: str = "model",
@@ -194,6 +194,8 @@ def build_raw_input(payload: Dict[str, Any]) -> pd.DataFrame:
 
 
 def predict_price(model, features_df: pd.DataFrame) -> float:
-    """Run prediction for a single row and return a scalar price."""
+    """Run price predicitions."""
+
     pred = model.predict(features_df)
+
     return float(np.ravel(pred)[0])
