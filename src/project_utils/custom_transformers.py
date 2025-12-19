@@ -41,9 +41,8 @@ class BrandModelGroupImputer(BaseEstimator, TransformerMixin):
         Brand–Model hierarchical scheme.
     """
 
-    def __init__(self, brand_col: str = "Brand", model_col: str = "model"):
-        self.brand_col = brand_col
-        self.model_col = model_col
+    def __init__(self, brand_model_col: str = "brand_model"):
+        self.brand_model_col = brand_model_col
 
     def fit(self, X, y=None):
         X = pd.DataFrame(X).copy()
@@ -58,7 +57,7 @@ class BrandModelGroupImputer(BaseEstimator, TransformerMixin):
             self.global_modes_ = pd.Series(dtype=object)
 
         # Compute group-level medians and modes
-        grouped = X.groupby([self.brand_col, self.model_col], dropna=False)
+        grouped = X.groupby([self.brand_model_col], dropna=False)
 
         self.group_medians_ = grouped.median(numeric_only=True)
 
@@ -77,18 +76,18 @@ class BrandModelGroupImputer(BaseEstimator, TransformerMixin):
         merged = X.merge(
             self.group_medians_.add_suffix("_median"),
             how="left",
-            left_on=[self.brand_col, self.model_col],
+            left_on=[self.brand_model_col],
             right_index=True,
         )
         merged = merged.merge(
             self.group_modes_.add_suffix("_mode"),
             how="left",
-            left_on=[self.brand_col, self.model_col],
+            left_on=[self.brand_model_col],
             right_index=True,
         )
 
         for col in X.columns:
-            if col in [self.brand_col, self.model_col]:
+            if col in [self.brand_model_col]:
                 continue  # skip grouping columns
 
             if col in X.select_dtypes(include=[np.number]).columns:
