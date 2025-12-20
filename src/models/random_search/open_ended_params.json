@@ -1,0 +1,14 @@
+{
+    "regressor__regressor__early_stopping": true,
+    "regressor__regressor__l2_regularization": 0.040171353537959864,
+    "regressor__regressor__learning_rate": 0.04738894255580797,
+    "regressor__regressor__loss": "absolute_error",
+    "regressor__regressor__max_bins": 224,
+    "regressor__regressor__max_depth": null,
+    "regressor__regressor__max_features": 0.7,
+    "regressor__regressor__max_iter": 884,
+    "regressor__regressor__max_leaf_nodes": 255,
+    "regressor__regressor__min_samples_leaf": 23,
+    "regressor__regressor__n_iter_no_change": 25,
+    "regressor__regressor__validation_fraction": 0.1
+}
