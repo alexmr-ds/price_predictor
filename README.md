@@ -185,6 +185,4 @@ streamlit run app.py
 ```
 ## Final Remarks and Future Work
 
-While the adopted modeling and hyperparameter optimization strategy yielded strong predictive performance there remains scope for further improvement. In particular, model performance could potentially be enhanced by expanding the hyperparameter search space used during randomized search. Increasing either the size of the parameter grid or the number of sampled configurations would allow a more exhaustive exploration of the optimization landscape, potentially uncovering better-performing parameter combinations.
-
-Such an extension would come at the cost of increased computational time and resource usage, and was therefore not pursued in the current implementation. Future work could also explore alternative hyperparameter optimization strategies, such as Bayesian optimization, to balance computational efficiency with a more informed search of the parameter space.
+Although the adopted modelling and hyperparameter optimisation strategy yielded strong predictive performance, there remains scope for further improvement. In particular, several strategies implemented in the open_ended.ipynb notebook could be incorporated to further enhance the base models’ predictive capabilities, which would, in turn, improve the overall performance and generalisation of the stacking ensemble.
